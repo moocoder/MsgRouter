@@ -1,6 +1,5 @@
-import rospy
-import sys,os
-from std_msgs.msg import String
+from lib import rospy
+from msg_pack.std_msgs.msg import String
 
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)

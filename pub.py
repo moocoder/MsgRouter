@@ -1,5 +1,5 @@
-import rospy ,os
-from std_msgs.msg import String
+from lib import rospy
+from msg_pack.std_msgs import String
 
 def talker():
     pub = rospy.Publisher('chatter', String, queue_size=10)

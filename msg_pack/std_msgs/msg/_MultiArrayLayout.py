@@ -113,7 +113,7 @@ uint32 stride  # stride of given dimension
       (length,) = _struct_I.unpack(str[start:end])
       self.dim = []
       for i in range(0, length):
-        val1 = msg_pack.std_msgs.msg.MultiArrayDimension()
+        val1 = msg_pack.msg_pack.std_msgs.msg.MultiArrayDimension()
         start = end
         end += 4
         (length,) = _struct_I.unpack(str[start:end])
@@ -176,7 +176,7 @@ uint32 stride  # stride of given dimension
       (length,) = _struct_I.unpack(str[start:end])
       self.dim = []
       for i in range(0, length):
-        val1 = msg_pack.std_msgs.msg.MultiArrayDimension()
+        val1 = msg_pack.msg_pack.std_msgs.msg.MultiArrayDimension()
         start = end
         end += 4
         (length,) = _struct_I.unpack(str[start:end])

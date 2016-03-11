@@ -210,7 +210,8 @@ def get_rostime():
     @rtype: L{Time}
     """
     if not _rostime_initialized:
-        raise rospy.exceptions.ROSInitException("time is not initialized. Have you called init_node()?")
+        pass
+        # raise rospy.exceptions.ROSInitException("time is not initialized. Have you called init_node()?")
     if _rostime_current is not None:
         # initialize with sim time
         return _rostime_current

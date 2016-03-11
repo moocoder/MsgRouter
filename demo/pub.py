@@ -1,14 +1,18 @@
 from lib import rospy
-from msg_pack.msg_pack.std_msgs.msg import String
-
+from msg_pack.std_msgs.msg import String
+import env
 def talker():
-    pub = rospy.Publisher('chatter', String, queue_size=10)
     rospy.init_node('talker', anonymous=True)
+
+    pub = rospy.Publisher('chatter', String, queue_size=10)
+
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         hello_str = "hello world %s" % rospy.get_time()
-        #rospy.loginfo(hello_str)
-        pub.publish(hello_str)
+        str = String()
+        str.data = hello_str
+        rospy.loginfo(hello_str)
+        pub.publish(str)
         rate.sleep()
 
 

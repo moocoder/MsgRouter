@@ -1057,6 +1057,7 @@ class _PublisherImpl(_TopicImpl):
             for c in conns:
                 try:
                     if not is_shutdown():
+                        # send data to other node
                         c.write_data(data)
                 except TransportTerminated as e:
                     logdebug("publisher connection to [%s] terminated, see errorlog for details:\n%s" % (
@@ -1215,7 +1216,7 @@ class _TopicManager(object):
         elif reg_type == Registration.SUB:
             rmap = self.subs
         else:
-            raise TypeError("invalid reg_type: %s" % s)
+            raise TypeError("invalid reg_type: %s" % reg_type)
         return rmap.get(resolved_name, None)
 
     def acquire_impl(self, reg_type, resolved_name, data_class):
@@ -1243,7 +1244,7 @@ class _TopicManager(object):
             rmap = self.subs
             impl_class = _SubscriberImpl
         else:
-            raise TypeError("invalid reg_type: %s" % s)
+            raise TypeError("invalid reg_type: %s" % reg_type)
         with self.lock:
             impl = rmap.get(resolved_name, None)
             if not impl:

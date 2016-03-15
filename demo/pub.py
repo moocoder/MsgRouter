@@ -1,7 +1,10 @@
 from lib import rospy
 from msg_pack.std_msgs.msg import String
 import lib.env
+import sys
 
+
+# sys.argv+=["__master:=http://localhost:11411"]
 
 def talker():
     rospy.init_node('talker', anonymous=False)
@@ -17,4 +20,6 @@ def talker():
         rate.sleep()
 
 
-talker()
+a = rospy.get_param("/s1/asd")
+print(a)
+#talker()

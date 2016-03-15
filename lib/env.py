@@ -11,4 +11,4 @@ ros_env = {
 }
 for i in ros_env:
     os.environ[i] = ros_env[i]
-print("root path:%s", path)
+print("root path:", path)

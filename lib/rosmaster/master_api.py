@@ -61,7 +61,9 @@ import logging
 import threading
 import time
 import traceback
-
+from lib.router import RouterManager
+from xmlrpc.client import ServerProxy
+from rosgraph import names
 from rosgraph.xmlrpc import XmlRpcHandler
 
 import rosgraph.names
@@ -271,6 +273,9 @@ class ROSMasterHandler(object):
         # parameter server dictionary
         self.param_server = rosmaster.paramserver.ParamDictionary(self.reg_manager)
 
+        # router
+        self.router = RouterManager()
+
     def _shutdown(self, reason=''):
         if self.thread_pool is not None:
             self.thread_pool.join_all(wait_for_tasks=False, wait_for_threads=False)
@@ -374,6 +379,7 @@ class ROSMasterHandler(object):
         @return: [code, msg, 0]
         @rtype: [int, str, int]
         """
+        print("key:", key, "value:", value)
         key = resolve_name(key, caller_id)
         self.param_server.set_param(key, value, self._notify_param_subscribers)
         mloginfo("+PARAM [%s] by %s", key, caller_id)
@@ -397,6 +403,12 @@ class ROSMasterHandler(object):
             represented as dictionaries.
         @rtype: [int, str, XMLRPCLegalValue]
         """
+        print(caller_id, key)
+        uri = self.router.match(key)
+        if uri:
+            s = ServerProxy(uri)
+            n = names.get_base_name(key)
+            return s.getParam(caller_id, n)
         try:
             key = resolve_name(key, caller_id)
             return 1, "Parameter [%s]" % key, self.param_server.get_param(key)
@@ -543,7 +555,7 @@ class ROSMasterHandler(object):
                 # use the api as a marker so that we limit one thread per subscriber
                 thread_pool.queue_task(node_api, task, (node_api, key, value))
         except KeyError:
-            _logger.warn('subscriber data stale (key [%s], listener [%s]): node API unknown' % (key, s))
+            _logger.warn('subscriber data stale (key [%s], listener [%s]): node API unknown' % (key, registrations))
 
     def _notify_param_subscribers(self, updates):
         """
@@ -748,6 +760,7 @@ class ROSMasterHandler(object):
         # NOTE: we need topic_type for getPublishedTopics.
         try:
             self.ps_lock.acquire()
+
             self.reg_manager.register_publisher(topic, caller_id, caller_api)
             # don't let '*' type squash valid typing
             if topic_type != rosgraph.names.ANYTYPE or not topic in self.topics_types:

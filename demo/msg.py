@@ -1,5 +1,6 @@
 from lib import rospy
 from msg_pack.std_msgs.msg import String
+import rosgraph
 import lib.env
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
@@ -18,6 +19,8 @@ def listener():
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
+
+print(rosgraph.get_master_uri())
 listener()
-#rospy.set_param('a',2)
+rospy.set_param('sd', 2)
 #rospy.get_param_names()

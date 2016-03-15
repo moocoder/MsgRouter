@@ -90,8 +90,8 @@ def start_node(environ, resolved_name, master_uri=None, port=0, tcpros_port=0):
     init_tcpros(tcpros_port)
     if not master_uri:
         master_uri = rosgraph.get_master_uri()
-    if not master_uri:
-        master_uri = DEFAULT_MASTER_URI
+    # if not master_uri:
+    #    master_uri = DEFAULT_MASTER_URI
 
     # this will go away in future versions of API
     _set_caller_id(resolved_name)

@@ -272,6 +272,9 @@ def canonicalize_name(name):
         return '/'.join([x for x in name.split(SEP) if x])
 
 
+def get_base_name(name):
+    s = name.split("/")
+    return s[-1]
 def resolve_name(name, namespace_, remappings=None):
     """
     Resolve a ROS name to its global, canonical form. Private ~names
